@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Osano API Tester</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand">
+          <div class="brand-mark">O</div>
+          <div>
+            <div>Osano API Tester</div>
+            <div class="brand-sub" id="brand-sub">Customer REST API</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="api-tabs" id="api-tabs"></div>
+
+      <div class="settings-block" id="settings-block"></div>
+
+      <div class="sidebar-search">
+        <input id="endpoint-search" type="text" placeholder="Filter endpoints…" />
+      </div>
+
+      <nav class="nav" id="nav"></nav>
+    </aside>
+
+    <main class="main" id="main">
+      <div class="welcome" id="welcome">
+        <h1>Welcome to the <span class="purple-accent">Osano API Tester</span></h1>
+        <p>Pick an API above and an endpoint on the left to craft a request. Your keys and base URLs live only in this browser.</p>
+        <div class="welcome-badges" id="welcome-badges"></div>
+      </div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="endpoints.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

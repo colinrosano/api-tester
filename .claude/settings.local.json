@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node server.js)",
+      "Bash(curl -s -o /dev/null -w \"index: %{http_code}\\\\n\" http://localhost:4173/)",
+      "Bash(curl -s -o /dev/null -w \"app.js: %{http_code}\\\\n\" http://localhost:4173/app.js)",
+      "Bash(curl -s -o /dev/null -w \"endpoints.js: %{http_code}\\\\n\" http://localhost:4173/endpoints.js)",
+      "Bash(curl -s -o /dev/null -w \"styles.css: %{http_code}\\\\n\" http://localhost:4173/styles.css)",
+      "Bash(curl -s -X POST http://localhost:4173/api/proxy -H \"Content-Type: application/json\" -d '{\"method\":\"GET\",\"apiPath\":\"/v1/cookie-consent/configs?limit=1\",\"apiKey\":\"test-bad-key-12345\"}')",
+      "Bash(curl -s http://localhost:4173/)",
+      "Bash(curl -sI http://localhost:4173/styles.css)",
+      "Bash(lsof -ti:4173)",
+      "Bash(xargs kill *)",
+      "Bash(lsof -i:4173)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(curl -s http://localhost:4173/styles.css)",
+      "Bash(node build-bundle.js)"
+    ]
+  }
+}
