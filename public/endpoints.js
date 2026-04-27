@@ -157,51 +157,6 @@ const APIS = [
       },
 
       {
-        id: 'dsar-legacy',
-        name: 'DSAR (legacy)',
-        endpoints: [
-          {
-            id: 'list-dsar',
-            method: 'GET',
-            path: '/v1/dsar',
-            title: 'List DSAR Requests',
-            queryParams: [
-              { name: 'limit',  desc: 'Max results', default: '100' },
-              { name: 'next',   desc: 'Pagination token' },
-              { name: 'status', desc: 'Status filter' },
-            ],
-          },
-          {
-            id: 'create-dsar',
-            method: 'POST',
-            path: '/v1/dsar',
-            title: 'Create a DSAR',
-            bodyTemplate: {
-              type: 'access',
-              subject: { email: 'user@example.com', firstName: 'First', lastName: 'Last' },
-            },
-          },
-          { id: 'get-dsar', method: 'GET', path: '/v1/dsar/{dsarId}', title: 'Get DSAR', pathParams: ['dsarId'] },
-          {
-            id: 'update-dsar',
-            method: 'PATCH',
-            path: '/v1/dsar/{dsarId}',
-            title: 'Update DSAR',
-            pathParams: ['dsarId'],
-            bodyTemplate: { status: 'in-progress' },
-          },
-          {
-            id: 'dsar-identification',
-            method: 'POST',
-            path: '/v1/dsar/{dsarId}/identification',
-            title: 'Update Identification Photo',
-            pathParams: ['dsarId'],
-            bodyTemplate: { identificationPhoto: 'base64-encoded-image-data' },
-          },
-        ],
-      },
-
-      {
         id: 'subject-rights',
         name: 'Subject Rights Requests',
         endpoints: [
