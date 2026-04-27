@@ -513,90 +513,6 @@ connectors_menu() {
 }
 
 # =============================================================================
-#   DSAR (legacy) — /v1/dsar
-# =============================================================================
-
-ep_list_dsar() {
-  banner
-  echo "${C_BOLD}GET /v1/dsar${C_RESET}  — List DSAR requests"
-  build_query_string \
-    "limit" "Max results" "100" \
-    "next"  "Pagination token" "" \
-    "status" "Status filter" ""
-  execute_request "GET" "/v1/dsar${REPLY_QUERY}"
-}
-
-ep_create_dsar() {
-  banner
-  echo "${C_BOLD}POST /v1/dsar${C_RESET}  — Create a DSAR"
-  local template='{
-  "type": "access",
-  "subject": {
-    "email": "user@example.com",
-    "firstName": "First",
-    "lastName": "Last"
-  }
-}'
-  prompt_json_body "$template"
-  execute_request "POST" "/v1/dsar" "$REPLY_BODY"
-}
-
-ep_get_dsar() {
-  banner
-  echo "${C_BOLD}GET /v1/dsar/{dsarId}${C_RESET}  — Get DSAR"
-  prompt_required "dsarId"
-  local id="$REPLY_VALUE"
-  execute_request "GET" "/v1/dsar/$(urlencode "$id")"
-}
-
-ep_update_dsar() {
-  banner
-  echo "${C_BOLD}PATCH /v1/dsar/{dsarId}${C_RESET}  — Update DSAR"
-  prompt_required "dsarId"
-  local id="$REPLY_VALUE"
-  local template='{
-  "status": "in-progress"
-}'
-  prompt_json_body "$template"
-  execute_request "PATCH" "/v1/dsar/$(urlencode "$id")" "$REPLY_BODY"
-}
-
-ep_dsar_identification() {
-  banner
-  echo "${C_BOLD}POST /v1/dsar/{dsarId}/identification${C_RESET}  — Update Identification Photo"
-  prompt_required "dsarId"
-  local id="$REPLY_VALUE"
-  local template='{
-  "identificationPhoto": "base64-encoded-image-data"
-}'
-  prompt_json_body "$template"
-  execute_request "POST" "/v1/dsar/$(urlencode "$id")/identification" "$REPLY_BODY"
-}
-
-dsar_legacy_menu() {
-  while true; do
-    banner
-    echo "${C_BOLD}DSAR (legacy /v1/dsar)${C_RESET}"
-    echo "  1) GET   /v1/dsar                              — List DSARs"
-    echo "  2) POST  /v1/dsar                              — Create DSAR"
-    echo "  3) GET   /v1/dsar/{dsarId}                     — Get DSAR"
-    echo "  4) PATCH /v1/dsar/{dsarId}                     — Update DSAR"
-    echo "  5) POST  /v1/dsar/{dsarId}/identification      — Update identification"
-    echo "  0) Back"
-    echo ""
-    read -r -p "  Choice: " c
-    case "$c" in
-      1) ep_list_dsar ;;
-      2) ep_create_dsar ;;
-      3) ep_get_dsar ;;
-      4) ep_update_dsar ;;
-      5) ep_dsar_identification ;;
-      0) return ;;
-    esac
-  done
-}
-
-# =============================================================================
 #   Subject Rights Requests — /v1/subject-rights/requests
 # =============================================================================
 
@@ -923,231 +839,6 @@ dd_data_stores_menu() {
 }
 
 # =============================================================================
-#   Data Stores (legacy) — /v1/data-stores
-# =============================================================================
-
-ep_list_data_stores() {
-  banner
-  echo "${C_BOLD}GET /v1/data-stores${C_RESET}  — List Data Stores (legacy)"
-  build_query_string \
-    "limit" "Max results" "100" \
-    "next"  "Pagination token" ""
-  execute_request "GET" "/v1/data-stores${REPLY_QUERY}"
-}
-
-ep_create_data_store() {
-  banner
-  echo "${C_BOLD}POST /v1/data-stores${C_RESET}  — Create Data Store (legacy)"
-  local template='{
-  "name": "My Data Store"
-}'
-  prompt_json_body "$template"
-  execute_request "POST" "/v1/data-stores" "$REPLY_BODY"
-}
-
-ep_get_data_store() {
-  banner
-  echo "${C_BOLD}GET /v1/data-stores/{dataStoreId}${C_RESET}  — Get Data Store"
-  prompt_required "dataStoreId"
-  local id="$REPLY_VALUE"
-  execute_request "GET" "/v1/data-stores/$(urlencode "$id")"
-}
-
-ep_delete_data_store() {
-  banner
-  echo "${C_BOLD}DELETE /v1/data-stores/{dataStoreId}${C_RESET}  — Delete Data Store"
-  prompt_required "dataStoreId"
-  local id="$REPLY_VALUE"
-  execute_request "DELETE" "/v1/data-stores/$(urlencode "$id")"
-}
-
-ep_update_data_store() {
-  banner
-  echo "${C_BOLD}PATCH /v1/data-stores/{dataStoreId}${C_RESET}  — Update Data Store"
-  prompt_required "dataStoreId"
-  local id="$REPLY_VALUE"
-  local template='{
-  "name": "Renamed"
-}'
-  prompt_json_body "$template"
-  execute_request "PATCH" "/v1/data-stores/$(urlencode "$id")" "$REPLY_BODY"
-}
-
-ep_put_data_store_fields() {
-  banner
-  echo "${C_BOLD}PUT /v1/data-stores/{dataStoreId}/fields${C_RESET}  — Replace Data Store Fields"
-  prompt_required "dataStoreId"
-  local id="$REPLY_VALUE"
-  local template='{
-  "fields": [
-    { "name": "email", "classification": "PII" }
-  ]
-}'
-  prompt_json_body "$template"
-  execute_request "PUT" "/v1/data-stores/$(urlencode "$id")/fields" "$REPLY_BODY"
-}
-
-ep_get_data_store_fields() {
-  banner
-  echo "${C_BOLD}GET /v1/data-stores/{dataStoreId}/fields${C_RESET}  — List Data Store Fields"
-  prompt_required "dataStoreId"
-  local id="$REPLY_VALUE"
-  build_query_string \
-    "limit" "Max results" "100" \
-    "next"  "Pagination token" ""
-  execute_request "GET" "/v1/data-stores/$(urlencode "$id")/fields${REPLY_QUERY}"
-}
-
-ep_delete_data_store_field() {
-  banner
-  echo "${C_BOLD}DELETE /v1/data-stores/{dataStoreId}/fields/{fieldId}${C_RESET}  — Delete Field"
-  prompt_required "dataStoreId"
-  local dsid="$REPLY_VALUE"
-  prompt_required "fieldId"
-  local fid="$REPLY_VALUE"
-  execute_request "DELETE" "/v1/data-stores/$(urlencode "$dsid")/fields/$(urlencode "$fid")"
-}
-
-ep_update_data_store_field() {
-  banner
-  echo "${C_BOLD}PATCH /v1/data-stores/{dataStoreId}/fields/{fieldId}${C_RESET}  — Update Field"
-  prompt_required "dataStoreId"
-  local dsid="$REPLY_VALUE"
-  prompt_required "fieldId"
-  local fid="$REPLY_VALUE"
-  local template='{
-  "classification": "PII"
-}'
-  prompt_json_body "$template"
-  execute_request "PATCH" "/v1/data-stores/$(urlencode "$dsid")/fields/$(urlencode "$fid")" "$REPLY_BODY"
-}
-
-data_stores_menu() {
-  while true; do
-    banner
-    echo "${C_BOLD}Data Stores (legacy /v1/data-stores)${C_RESET}"
-    echo "  1)  GET    /v1/data-stores                                     — List"
-    echo "  2)  POST   /v1/data-stores                                     — Create"
-    echo "  3)  GET    /v1/data-stores/{dataStoreId}                       — Get"
-    echo "  4)  DELETE /v1/data-stores/{dataStoreId}                       — Delete"
-    echo "  5)  PATCH  /v1/data-stores/{dataStoreId}                       — Update"
-    echo "  6)  PUT    /v1/data-stores/{dataStoreId}/fields                — Replace fields"
-    echo "  7)  GET    /v1/data-stores/{dataStoreId}/fields                — List fields"
-    echo "  8)  DELETE /v1/data-stores/{dataStoreId}/fields/{fieldId}      — Delete field"
-    echo "  9)  PATCH  /v1/data-stores/{dataStoreId}/fields/{fieldId}      — Update field"
-    echo "  0)  Back"
-    echo ""
-    read -r -p "  Choice: " c
-    case "$c" in
-      1) ep_list_data_stores ;;
-      2) ep_create_data_store ;;
-      3) ep_get_data_store ;;
-      4) ep_delete_data_store ;;
-      5) ep_update_data_store ;;
-      6) ep_put_data_store_fields ;;
-      7) ep_get_data_store_fields ;;
-      8) ep_delete_data_store_field ;;
-      9) ep_update_data_store_field ;;
-      0) return ;;
-    esac
-  done
-}
-
-# =============================================================================
-#   DSAR Action Items (legacy) — /v1/dsar-action-items
-# =============================================================================
-
-ep_list_dsar_action_items() {
-  banner
-  echo "${C_BOLD}GET /v1/dsar-action-items${C_RESET}  — List DSAR Action Items"
-  build_query_string \
-    "limit" "Max results" "100" \
-    "next"  "Pagination token" "" \
-    "status" "Status filter" "" \
-    "dsarId" "Filter by DSAR id" ""
-  execute_request "GET" "/v1/dsar-action-items${REPLY_QUERY}"
-}
-
-ep_get_dsar_action_item() {
-  banner
-  echo "${C_BOLD}GET /v1/dsar-action-items/{actionItemId}${C_RESET}  — Get DSAR Action Item"
-  prompt_required "actionItemId"
-  local id="$REPLY_VALUE"
-  execute_request "GET" "/v1/dsar-action-items/$(urlencode "$id")"
-}
-
-ep_update_dsar_action_item() {
-  banner
-  echo "${C_BOLD}PATCH /v1/dsar-action-items/{actionItemId}${C_RESET}  — Update DSAR Action Item"
-  prompt_required "actionItemId"
-  local id="$REPLY_VALUE"
-  local template='{
-  "status": "completed"
-}'
-  prompt_json_body "$template"
-  execute_request "PATCH" "/v1/dsar-action-items/$(urlencode "$id")" "$REPLY_BODY"
-}
-
-ep_get_dsar_ai_summary() {
-  banner
-  echo "${C_BOLD}GET /v1/dsar-action-items/{actionItemId}/summary-entry${C_RESET}  — Get Summary Entry"
-  prompt_required "actionItemId"
-  local id="$REPLY_VALUE"
-  execute_request "GET" "/v1/dsar-action-items/$(urlencode "$id")/summary-entry"
-}
-
-ep_create_dsar_ai_summary() {
-  banner
-  echo "${C_BOLD}POST /v1/dsar-action-items/{actionItemId}/summary-entry${C_RESET}  — Create Summary Entry"
-  prompt_required "actionItemId"
-  local id="$REPLY_VALUE"
-  local template='{
-  "entry": "Description of completed work"
-}'
-  prompt_json_body "$template"
-  execute_request "POST" "/v1/dsar-action-items/$(urlencode "$id")/summary-entry" "$REPLY_BODY"
-}
-
-ep_update_dsar_ai_summary() {
-  banner
-  echo "${C_BOLD}PATCH /v1/dsar-action-items/{actionItemId}/summary-entry/{dsarSummaryEntryId}${C_RESET}  — Update Summary Entry"
-  prompt_required "actionItemId"
-  local aid="$REPLY_VALUE"
-  prompt_required "dsarSummaryEntryId"
-  local sid="$REPLY_VALUE"
-  local template='{
-  "entry": "Updated description"
-}'
-  prompt_json_body "$template"
-  execute_request "PATCH" "/v1/dsar-action-items/$(urlencode "$aid")/summary-entry/$(urlencode "$sid")" "$REPLY_BODY"
-}
-
-dsar_action_items_menu() {
-  while true; do
-    banner
-    echo "${C_BOLD}DSAR Action Items (legacy)${C_RESET}"
-    echo "  1) GET   /v1/dsar-action-items                                                          — List"
-    echo "  2) GET   /v1/dsar-action-items/{actionItemId}                                           — Get"
-    echo "  3) PATCH /v1/dsar-action-items/{actionItemId}                                           — Update"
-    echo "  4) GET   /v1/dsar-action-items/{actionItemId}/summary-entry                             — Get summary"
-    echo "  5) POST  /v1/dsar-action-items/{actionItemId}/summary-entry                             — Create summary"
-    echo "  6) PATCH /v1/dsar-action-items/{actionItemId}/summary-entry/{dsarSummaryEntryId}        — Update summary"
-    echo "  0) Back"
-    echo ""
-    read -r -p "  Choice: " c
-    case "$c" in
-      1) ep_list_dsar_action_items ;;
-      2) ep_get_dsar_action_item ;;
-      3) ep_update_dsar_action_item ;;
-      4) ep_get_dsar_ai_summary ;;
-      5) ep_create_dsar_ai_summary ;;
-      6) ep_update_dsar_ai_summary ;;
-      0) return ;;
-    esac
-  done
-}
-
-# =============================================================================
 #   Subject Rights Action Items — /v1/subject-rights/action-items
 # =============================================================================
 
@@ -1298,13 +989,10 @@ main_menu() {
     echo "${C_BOLD}Main Menu${C_RESET}"
     echo "  1) Cookie Consent                 (10 endpoints)"
     echo "  2) Connectors                     (2 endpoints)"
-    echo "  3) DSAR - legacy                  (5 endpoints)"
-    echo "  4) Subject Rights Requests        (12 endpoints)"
-    echo "  5) Data Discovery - Data Stores   (10 endpoints)"
-    echo "  6) Data Stores - legacy           (9 endpoints)"
-    echo "  7) DSAR Action Items - legacy     (6 endpoints)"
-    echo "  8) Subject Rights Action Items    (7 endpoints)"
-    echo "  9) Customer Insights              (1 endpoint)"
+    echo "  3) Subject Rights Requests        (12 endpoints)"
+    echo "  4) Data Discovery - Data Stores   (10 endpoints)"
+    echo "  5) Subject Rights Action Items    (7 endpoints)"
+    echo "  6) Customer Insights              (1 endpoint)"
     echo ""
     echo "  s) Settings (API key / base URL)"
     echo "  q) Quit"
@@ -1313,13 +1001,10 @@ main_menu() {
     case "$c" in
       1) cookie_consent_menu ;;
       2) connectors_menu ;;
-      3) dsar_legacy_menu ;;
-      4) srr_menu ;;
-      5) dd_data_stores_menu ;;
-      6) data_stores_menu ;;
-      7) dsar_action_items_menu ;;
-      8) sr_action_items_menu ;;
-      9) customer_insights_menu ;;
+      3) srr_menu ;;
+      4) dd_data_stores_menu ;;
+      5) sr_action_items_menu ;;
+      6) customer_insights_menu ;;
       s|S) config_menu ;;
       q|Q) echo ""; echo "Goodbye."; exit 0 ;;
     esac
